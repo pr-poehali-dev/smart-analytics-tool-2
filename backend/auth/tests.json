@@ -1,0 +1,50 @@
+{
+  "tests": [
+    {
+      "name": "CORS preflight",
+      "method": "OPTIONS",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Register or login user",
+      "method": "POST",
+      "body": {
+        "username": "testuser",
+        "display_name": "Test User"
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Missing username",
+      "method": "POST",
+      "body": {
+        "username": "",
+        "display_name": "Test"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "username is required"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Missing display_name",
+      "method": "POST",
+      "body": {
+        "username": "someone",
+        "display_name": ""
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "display_name is required"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET not allowed",
+      "method": "GET",
+      "expectedStatus": 405
+    }
+  ]
+}

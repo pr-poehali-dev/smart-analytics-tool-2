@@ -1,0 +1,35 @@
+{
+  "tests": [
+    {
+      "name": "CORS preflight",
+      "method": "OPTIONS",
+      "expectedStatus": 200
+    },
+    {
+      "name": "GET all users",
+      "method": "GET",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET search users",
+      "method": "GET",
+      "path": "/?search=test",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET users with exclude",
+      "method": "GET",
+      "path": "/?exclude_id=1",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST not allowed",
+      "method": "POST",
+      "body": {},
+      "expectedStatus": 405
+    }
+  ]
+}

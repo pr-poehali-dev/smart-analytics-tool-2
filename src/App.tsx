@@ -1,28 +1,47 @@
-
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Chat from "./pages/Chat";
 
-const queryClient = new QueryClient();
+interface User {
+  id: number;
+  username: string;
+  display_name: string;
+  avatar_color: string;
+}
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      try {
+        setUser(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem("user");
+      }
+    }
+  }, []);
+
+  const handleLogin = (userData: User) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  return (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      {user ? <Chat user={user} onLogout={handleLogout} /> : <Login onLogin={handleLogin} />}
     </TooltipProvider>
-  </QueryClientProvider>
-);
+  );
+};
 
 export default App;

@@ -1,0 +1,51 @@
+{
+  "tests": [
+    {
+      "name": "CORS preflight",
+      "method": "OPTIONS",
+      "expectedStatus": 200
+    },
+    {
+      "name": "GET messages without chat_id",
+      "method": "GET",
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "chat_id is required"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET messages for chat",
+      "method": "GET",
+      "path": "/?chat_id=1&limit=10&offset=0",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST message missing fields",
+      "method": "POST",
+      "body": {
+        "chat_id": 1
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "chat_id and sender_id are required"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST message missing text and file",
+      "method": "POST",
+      "body": {
+        "chat_id": 1,
+        "sender_id": 1,
+        "text": ""
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "text or file_url is required"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
